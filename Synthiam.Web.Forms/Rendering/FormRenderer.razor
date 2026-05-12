@@ -1,0 +1,180 @@
+@namespace Synthiam.Web.Forms.Rendering
+@using System.Windows.Forms
+@implements IDisposable
+
+<div class="swf-application" style="width:100%;height:100%;position:relative;overflow:hidden;">
+    @if (Form != null)
+    {
+        @((Microsoft.AspNetCore.Components.RenderFragment)(builder =>
+        {
+            int seq = 0;
+            Form.BuildRenderTree(builder, ref seq);
+        }))
+
+        @* Render modal form dialogs *@
+        @foreach (var modal in Form._modalStack.ToArray())
+        {
+            var m = modal;
+            var dlgWidth = m.Width > 100 ? m.Width : 500;
+            var dlgHeight = m.Height > 50 ? m.Height : 400;
+            <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;">
+                <div style="background:#f0f0f0;border:1px solid #666;box-shadow:0 4px 20px rgba(0,0,0,0.5);display:flex;flex-direction:column;width:@(dlgWidth)px;max-height:90vh;">
+                    <div style="background:#3c3c40;color:#fafaff;padding:6px 12px;font-size:12px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;cursor:default;">
+                        <span>@(m.Text ?? "Dialog")</span>
+                        <button @onclick="() => CloseModal(m)"
+                                style="background:none;border:none;color:#fafaff;cursor:pointer;font-size:18px;padding:2px 6px;line-height:1;">&times;</button>
+                    </div>
+                    <div style="position:relative;flex:1 1 auto;height:@(dlgHeight - 30)px;overflow:auto;">
+                        @((Microsoft.AspNetCore.Components.RenderFragment)(builder =>
+                        {
+                            int seq2 = 10000;
+                            m.RenderChildren(builder, ref seq2);
+                        }))
+                    </div>
+                </div>
+            </div>
+        }
+
+        @* Render message boxes *@
+        @foreach (var msg in MessageBox._pendingMessages.ToArray())
+        {
+            <div class="swf-modal-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:20000;display:flex;align-items:center;justify-content:center;">
+                <div style="background:#f0f0f0;border:1px solid #888;box-shadow:0 2px 12px rgba(0,0,0,0.4);min-width:280px;max-width:500px;border-radius:4px;"
+                     @onclick:stopPropagation="true">
+                    @if (!string.IsNullOrEmpty(msg.Caption))
+                    {
+                        <div style="background:#3c3c40;color:#fafaff;padding:8px 12px;font-size:12px;font-weight:bold;border-radius:4px 4px 0 0;">
+                            @msg.Caption
+                        </div>
+                    }
+                    <div style="padding:16px 20px;color:#1e1e1e;font-size:13px;white-space:pre-wrap;">
+                        @msg.Text
+                    </div>
+                    <div style="padding:8px 12px;display:flex;justify-content:flex-end;gap:8px;border-top:1px solid #ccc;">
+                        @{
+                            var buttons = GetMessageBoxButtons(msg.Buttons);
+                            foreach (var btn in buttons)
+                            {
+                                var result = btn.Result;
+                                <button style="padding:4px 16px;cursor:pointer;background:#e0e0e0;border:1px solid #aaa;border-radius:3px;"
+                                        @onclick="() => DismissMessageBox(msg, result)">@btn.Text</button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Form Form { get; set; }
+
+    [Parameter]
+    public EventCallback OnFormLoaded { get; set; }
+
+    private bool _initialized;
+    private bool _renderQueued;
+    private long _lastRenderTicks;
+
+    private void QueueRender()
+    {
+        if (!_renderQueued)
+        {
+            _renderQueued = true;
+            _ = InvokeAsync(() =>
+            {
+                _renderQueued = false;
+
+                // Throttle renders to ~60fps to avoid flooding the browser with diffs
+                long now = Environment.TickCount64;
+                long elapsed = now - _lastRenderTicks;
+                if (elapsed >= 16)
+                {
+                    _lastRenderTicks = now;
+                    StateHasChanged();
+                }
+                else
+                {
+                    // Schedule a delayed render for the remaining time
+                    _ = Task.Delay((int)(16 - elapsed)).ContinueWith(_ => InvokeAsync(() =>
+                    {
+                        _lastRenderTicks = Environment.TickCount64;
+                        StateHasChanged();
+                    }));
+                }
+            });
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (Form != null)
+        {
+            Form._stateChanged = QueueRender;
+            Form._blazorReceiver = this;
+            Form._blazorInvokeAsync = (action) => InvokeAsync(action);
+            // Set global statics so modal dialogs can inherit Blazor context
+            Form._globalBlazorReceiver = this;
+            Form._globalBlazorInvokeAsync = (action) => InvokeAsync(action);
+            Form._globalStateChanged = QueueRender;
+            MessageBox._notifyRenderer = QueueRender;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && Form != null && !_initialized)
+        {
+            _initialized = true;
+            Form.InvokeOnLoad();
+
+            if (OnFormLoaded.HasDelegate)
+                await OnFormLoaded.InvokeAsync();
+
+            StateHasChanged();
+        }
+    }
+
+    private void CloseModal(Form modal)
+    {
+        if (modal.DialogResult == DialogResult.None)
+            modal.DialogResult = DialogResult.Cancel;
+        modal.Close();
+    }
+
+    private void DismissMessageBox(MessageBoxRequest msg, DialogResult result)
+    {
+        msg.Complete(result);
+        MessageBox._pendingMessages.Remove(msg);
+        StateHasChanged();
+    }
+
+    private record ButtonDef(string Text, DialogResult Result);
+
+    private ButtonDef[] GetMessageBoxButtons(MessageBoxButtons buttons)
+    {
+        return buttons switch
+        {
+            MessageBoxButtons.OK => new[] { new ButtonDef("OK", DialogResult.OK) },
+            MessageBoxButtons.OKCancel => new[] { new ButtonDef("OK", DialogResult.OK), new ButtonDef("Cancel", DialogResult.Cancel) },
+            MessageBoxButtons.YesNo => new[] { new ButtonDef("Yes", DialogResult.Yes), new ButtonDef("No", DialogResult.No) },
+            MessageBoxButtons.YesNoCancel => new[] { new ButtonDef("Yes", DialogResult.Yes), new ButtonDef("No", DialogResult.No), new ButtonDef("Cancel", DialogResult.Cancel) },
+            MessageBoxButtons.RetryCancel => new[] { new ButtonDef("Retry", DialogResult.Retry), new ButtonDef("Cancel", DialogResult.Cancel) },
+            MessageBoxButtons.AbortRetryIgnore => new[] { new ButtonDef("Abort", DialogResult.Abort), new ButtonDef("Retry", DialogResult.Retry), new ButtonDef("Ignore", DialogResult.Ignore) },
+            _ => new[] { new ButtonDef("OK", DialogResult.OK) }
+        };
+    }
+
+    public void Dispose()
+    {
+        if (Form != null)
+        {
+            Form._stateChanged = null;
+            Form._blazorReceiver = null;
+            Form._blazorInvokeAsync = null;
+        }
+        MessageBox._notifyRenderer = null;
+    }
+}

@@ -1,0 +1,942 @@
+/* ============================================
+   Synthiam.Web.Forms - WinForms to HTML/CSS
+   ============================================ */
+
+/* === Reset & Base === */
+.swf-application {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
+  color: #1e1e1e;
+  background-color: #f0f0f0;
+  box-sizing: border-box;
+  line-height: 1.4;
+}
+
+.swf-application *, .swf-application *::before, .swf-application *::after {
+  box-sizing: border-box;
+}
+
+/* === Control Base === */
+.swf-control {
+  position: relative;
+  display: block;
+}
+
+/* === Dock Layout Container === */
+.swf-dock-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.swf-dock-top {
+  flex-shrink: 0;
+}
+
+.swf-dock-bottom {
+  flex-shrink: 0;
+}
+
+.swf-dock-middle {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  min-height: 0;
+}
+
+.swf-dock-left {
+  flex-shrink: 0;
+}
+
+.swf-dock-right {
+  flex-shrink: 0;
+}
+
+.swf-dock-fill {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* === Form === */
+.swf-form {
+  background-color: #f0f0f0;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* === UserControl === */
+.swf-usercontrol {
+  position: relative;
+}
+
+/* === Borders === */
+.swf-border-single {
+  border: 1px solid #888;
+}
+
+.swf-border-3d {
+  border: 2px inset #ccc;
+}
+
+/* === Button === */
+.swf-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 12px;
+  border: 1px solid #adadad;
+  background-color: #e1e1e1;
+  color: #1e1e1e;
+  cursor: pointer;
+  font: inherit;
+  min-height: 23px;
+  text-align: center;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.swf-button:hover {
+  background-color: #c9def5;
+  border-color: #0078d4;
+}
+
+.swf-button:active {
+  background-color: #b5cfe3;
+  border-color: #005499;
+}
+
+.swf-button:disabled {
+  background-color: #f0f0f0;
+  color: #a0a0a0;
+  border-color: #d0d0d0;
+  cursor: default;
+}
+
+.swf-button.swf-flat {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.swf-button.swf-flat:hover {
+  border-color: #0078d4;
+  background-color: #c9def5;
+}
+
+/* === Label === */
+.swf-label {
+  display: inline-block;
+  padding: 0;
+  background: transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+/* === LinkLabel === */
+.swf-linklabel {
+  color: #0066cc;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.swf-linklabel:hover {
+  color: #004499;
+}
+
+/* === TextBox / Input === */
+.swf-textbox,
+.swf-textboxbase {
+  padding: 2px 4px;
+  border: 1px solid #888;
+  background-color: #fff;
+  color: #1e1e1e;
+  font: inherit;
+  outline: none;
+}
+
+.swf-textbox:focus,
+.swf-textboxbase:focus {
+  border-color: #0078d4;
+  box-shadow: 0 0 0 1px #0078d4;
+}
+
+.swf-textbox:disabled {
+  background-color: #f0f0f0;
+  color: #888;
+}
+
+textarea.swf-textbox {
+  resize: none;
+  overflow: auto;
+}
+
+/* === RichTextBox === */
+.swf-richtextbox {
+  padding: 4px;
+  border: 1px solid #888;
+  background-color: #fff;
+  overflow: auto;
+  min-height: 60px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.swf-richtextbox:focus {
+  border-color: #0078d4;
+  outline: none;
+}
+
+/* === CheckBox === */
+.swf-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.swf-checkbox input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.swf-checkbox.swf-disabled {
+  color: #a0a0a0;
+  cursor: default;
+}
+
+/* === RadioButton === */
+.swf-radiobutton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.swf-radiobutton input[type="radio"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* === ComboBox / Select === */
+.swf-combobox {
+  padding: 2px 4px;
+  border: 1px solid #888;
+  background-color: #fff;
+  color: #1e1e1e;
+  font: inherit;
+  min-height: 23px;
+  cursor: pointer;
+}
+
+.swf-combobox:focus {
+  border-color: #0078d4;
+  outline: none;
+}
+
+/* === ListBox === */
+.swf-listbox {
+  padding: 0;
+  border: 1px solid #888;
+  background-color: #fff;
+  color: #1e1e1e;
+  font: inherit;
+  overflow: auto;
+}
+
+.swf-listbox option {
+  padding: 2px 4px;
+}
+
+.swf-listbox option:checked {
+  background-color: #0078d4;
+  color: #fff;
+}
+
+/* === CheckedListBox === */
+.swf-checkedlistbox {
+  border: 1px solid #888;
+  background-color: #fff;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.swf-checkedlistbox-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.swf-checkedlistbox-item:hover {
+  background-color: #e8e8e8;
+}
+
+/* === NumericUpDown === */
+.swf-numericupdown {
+  padding: 2px 4px;
+  border: 1px solid #888;
+  background-color: #fff;
+  font: inherit;
+  -moz-appearance: textfield;
+}
+
+.swf-numericupdown:focus {
+  border-color: #0078d4;
+  outline: none;
+}
+
+/* === TrackBar === */
+.swf-trackbar {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.swf-trackbar::-webkit-slider-runnable-track {
+  background: #d0d0d0;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.swf-trackbar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #0078d4;
+  border-radius: 50%;
+  margin-top: -6px;
+}
+
+/* === PictureBox === */
+.swf-picturebox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.swf-picturebox img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* === ProgressBar === */
+.swf-progressbar {
+  background-color: #e6e6e6;
+  border: 1px solid #bcbcbc;
+  overflow: hidden;
+  height: 23px;
+}
+
+.swf-progressbar-fill {
+  background-color: #06b025;
+  height: 100%;
+  transition: width 0.2s ease;
+}
+
+.swf-progressbar-marquee .swf-progressbar-fill {
+  width: 30% !important;
+  animation: swf-marquee 2s infinite linear;
+}
+
+@keyframes swf-marquee {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+/* === Panel === */
+.swf-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+/* === FlowLayoutPanel === */
+.swf-flowlayoutpanel {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* === TableLayoutPanel === */
+.swf-tablelayoutpanel {
+  display: grid;
+}
+
+/* === GroupBox / Fieldset === */
+.swf-groupbox {
+  border: 1px solid #d0d0d0;
+  border-radius: 2px;
+  padding: 8px;
+  margin: 2px 0;
+}
+
+.swf-groupbox legend {
+  padding: 0 4px;
+  font-weight: normal;
+  color: #1e1e1e;
+}
+
+/* === SplitContainer === */
+.swf-splitcontainer {
+  display: flex;
+  overflow: hidden;
+}
+
+.swf-splitcontainer.swf-split-horizontal {
+  flex-direction: row;
+}
+
+.swf-splitcontainer.swf-split-vertical {
+  flex-direction: column;
+}
+
+.swf-splitter-bar {
+  background-color: #e0e0e0;
+  flex-shrink: 0;
+  cursor: col-resize;
+  user-select: none;
+}
+
+.swf-split-vertical > .swf-splitter-bar {
+  cursor: row-resize;
+}
+
+.swf-splitter-bar:hover {
+  background-color: #c0c0c0;
+}
+
+.swf-split-panel {
+  overflow: auto;
+  position: relative;
+}
+
+/* === TabControl === */
+.swf-tabcontrol {
+  display: flex;
+  flex-direction: column;
+}
+
+.swf-tab-headers {
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #d0d0d0;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.swf-tab-header {
+  padding: 6px 16px;
+  border: 1px solid transparent;
+  border-bottom: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: #444;
+  white-space: nowrap;
+  margin-bottom: -1px;
+  user-select: none;
+}
+
+.swf-tab-header:hover {
+  background-color: #e4e4e4;
+  color: #1e1e1e;
+}
+
+.swf-tab-header.swf-tab-active {
+  background-color: #fff;
+  border-color: #d0d0d0;
+  border-bottom-color: #fff;
+  color: #1e1e1e;
+  font-weight: 500;
+}
+
+.swf-tab-content {
+  flex: 1;
+  border: 1px solid #d0d0d0;
+  border-top: none;
+  background-color: #fff;
+  overflow: auto;
+  position: relative;
+}
+
+.swf-tabpage {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* === MenuStrip === */
+.swf-menustrip {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #d0d0d0;
+  padding: 0;
+  min-height: 24px;
+  flex-shrink: 0;
+}
+
+.swf-menustrip > .swf-toolstrip-items {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* === ToolStrip === */
+.swf-toolstrip {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #d0d0d0;
+  padding: 2px;
+  min-height: 25px;
+  flex-shrink: 0;
+}
+
+.swf-toolstrip-items {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 1px;
+}
+
+.swf-toolstrip-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font: inherit;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+}
+
+.swf-toolstrip-item:hover {
+  background-color: #c9def5;
+  border-color: #0078d4;
+}
+
+.swf-toolstrip-item:disabled {
+  color: #a0a0a0;
+  cursor: default;
+}
+
+.swf-toolstrip-item:disabled:hover {
+  background: transparent;
+  border-color: transparent;
+}
+
+.swf-toolstrip-separator {
+  width: 1px;
+  height: 20px;
+  background-color: #d0d0d0;
+  margin: 0 3px;
+  padding: 0;
+  cursor: default;
+}
+
+.swf-toolstrip-separator:hover {
+  background-color: #d0d0d0;
+  border-color: transparent;
+}
+
+/* Dropdown menus */
+.swf-toolstrip-dropdown {
+  position: relative;
+}
+
+.swf-toolstrip-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+  min-width: 160px;
+  z-index: 1000;
+  padding: 2px 0;
+  list-style: none;
+  margin: 0;
+}
+
+.swf-toolstrip-dropdown-menu .swf-toolstrip-item {
+  display: flex;
+  width: 100%;
+  padding: 4px 24px 4px 28px;
+  border: none;
+  border-radius: 0;
+}
+
+.swf-toolstrip-dropdown-menu .swf-toolstrip-item:hover {
+  background-color: #0078d4;
+  color: #fff;
+  border: none;
+}
+
+.swf-toolstrip-dropdown-menu .swf-toolstrip-separator {
+  width: auto;
+  height: 1px;
+  margin: 2px 0;
+}
+
+.swf-toolstrip-checked::before {
+  content: '✓';
+  position: absolute;
+  left: 8px;
+}
+
+/* === StatusStrip === */
+.swf-statusstrip {
+  display: flex;
+  align-items: center;
+  background-color: #007acc;
+  color: #fff;
+  border-top: 1px solid #005a9e;
+  padding: 0 4px;
+  min-height: 22px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.swf-statusstrip .swf-toolstrip-items {
+  width: 100%;
+}
+
+.swf-statusstrip .swf-toolstrip-item {
+  color: #fff;
+  padding: 1px 6px;
+}
+
+.swf-statusstrip .swf-toolstrip-item:hover {
+  background-color: rgba(255,255,255,0.1);
+  border-color: transparent;
+}
+
+.swf-statusstrip-spring {
+  flex: 1;
+}
+
+/* === ContextMenuStrip === */
+.swf-contextmenustrip {
+  position: fixed;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  min-width: 160px;
+  z-index: 10000;
+  padding: 2px 0;
+}
+
+/* === ListView === */
+.swf-listview {
+  border: 1px solid #888;
+  background-color: #fff;
+  overflow: auto;
+}
+
+.swf-listview table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.swf-listview th {
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  padding: 4px 8px;
+  text-align: left;
+  font-weight: normal;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  user-select: none;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swf-listview th:hover {
+  background-color: #e4e4e4;
+}
+
+.swf-listview td {
+  padding: 2px 8px;
+  border-bottom: 1px solid #f0f0f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swf-listview tr:hover td {
+  background-color: #e8f0fe;
+}
+
+.swf-listview tr.swf-selected td {
+  background-color: #0078d4;
+  color: #fff;
+}
+
+.swf-listview-grid td {
+  border: 1px solid #e0e0e0;
+}
+
+/* === TreeView === */
+.swf-treeview {
+  border: 1px solid #888;
+  background-color: #fff;
+  overflow: auto;
+  padding: 2px;
+}
+
+.swf-treeview ul {
+  list-style: none;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.swf-treeview > ul {
+  padding-left: 4px;
+}
+
+.swf-treenode {
+  padding: 1px 0;
+}
+
+.swf-treenode-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 4px;
+  cursor: pointer;
+  border-radius: 2px;
+  user-select: none;
+}
+
+.swf-treenode-content:hover {
+  background-color: #e8f0fe;
+}
+
+.swf-treenode-content.swf-selected {
+  background-color: #0078d4;
+  color: #fff;
+}
+
+.swf-treenode-toggle {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 10px;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.swf-treenode-toggle:hover {
+  color: #1e1e1e;
+}
+
+.swf-treenode-checkbox {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* === DataGridView === */
+.swf-datagridview {
+  border: 1px solid #888;
+  background-color: #fff;
+  overflow: auto;
+}
+
+.swf-datagridview table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.swf-datagridview th {
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  padding: 4px 6px;
+  text-align: left;
+  font-weight: normal;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.swf-datagridview td {
+  padding: 2px 6px;
+  border: 1px solid #e8e8e8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swf-datagridview tr:nth-child(even) td {
+  background-color: #fafafa;
+}
+
+.swf-datagridview tr:hover td {
+  background-color: #e8f0fe;
+}
+
+.swf-datagridview tr.swf-selected td {
+  background-color: #0078d4;
+  color: #fff;
+}
+
+.swf-datagridview td.swf-cell-button {
+  text-align: center;
+}
+
+.swf-datagridview td.swf-cell-button button {
+  padding: 1px 8px;
+  border: 1px solid #adadad;
+  background: #e1e1e1;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+}
+
+.swf-datagridview td.swf-cell-checkbox {
+  text-align: center;
+}
+
+/* === WebBrowser / IFrame === */
+.swf-webbrowser {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* === Modal Dialog === */
+.swf-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.swf-modal-dialog {
+  background-color: #f0f0f0;
+  border: 1px solid #888;
+  box-shadow: 4px 4px 16px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.swf-modal-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0078d4;
+  color: #fff;
+  padding: 4px 8px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.swf-modal-title {
+  font-weight: 500;
+}
+
+.swf-modal-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.swf-modal-close:hover {
+  background-color: #c42b1c;
+}
+
+.swf-modal-body {
+  flex: 1;
+  overflow: auto;
+  padding: 12px;
+}
+
+.swf-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 12px;
+  border-top: 1px solid #d0d0d0;
+  flex-shrink: 0;
+}
+
+.swf-modal-btn {
+  padding: 4px 16px;
+  border: 1px solid #adadad;
+  background-color: #e1e1e1;
+  cursor: pointer;
+  font: inherit;
+  min-width: 75px;
+}
+
+.swf-modal-btn:hover {
+  background-color: #c9def5;
+  border-color: #0078d4;
+}
+
+/* === Scrollbar styling === */
+.swf-application ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.swf-application ::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.swf-application ::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 5px;
+}
+
+.swf-application ::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* === Utility === */
+.swf-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.swf-hidden {
+  display: none !important;
+}

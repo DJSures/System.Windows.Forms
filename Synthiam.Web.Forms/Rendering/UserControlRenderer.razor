@@ -1,0 +1,35 @@
+@namespace Synthiam.Web.Forms.Rendering
+@using System.Windows.Forms
+@implements IDisposable
+
+<div class="swf-usercontrol-host" style="width:100%;height:100%;position:relative;">
+    @if (UserControl != null)
+    {
+        @((Microsoft.AspNetCore.Components.RenderFragment)(builder =>
+        {
+            int seq = 0;
+            UserControl.BuildRenderTree(builder, ref seq);
+        }))
+    }
+</div>
+
+@code {
+    [Parameter]
+    public UserControl UserControl { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (UserControl != null)
+        {
+            UserControl._stateChanged = () => InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (UserControl != null)
+        {
+            UserControl._stateChanged = null;
+        }
+    }
+}

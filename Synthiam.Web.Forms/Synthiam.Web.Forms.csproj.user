@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="ContainerControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Containers\FlowLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Containers\GroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Containers\Panel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Containers\TabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="ControlCollection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\CheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\CheckedListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\ComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\DataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\ForwardDeclarations.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\Label.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\LinkLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\ListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\NumericUpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\PictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\ProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\RadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\RichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\TextBoxBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\TrackBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\WebBrowser.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Form.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Menus\ContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Menus\MenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Menus\StatusStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="UserControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

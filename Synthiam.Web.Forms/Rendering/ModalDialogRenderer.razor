@@ -1,0 +1,84 @@
+@namespace Synthiam.Web.Forms.Rendering
+@using System.Windows.Forms
+
+@if (_visible)
+{
+    <div class="swf-modal-overlay" @onclick="OnOverlayClick">
+        <div class="swf-modal-dialog" style="@GetDialogStyle()" @onclick:stopPropagation="true">
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <div class="swf-modal-titlebar">
+                    <span class="swf-modal-title">@Title</span>
+                    <button class="swf-modal-close" @onclick="OnCloseClick">&times;</button>
+                </div>
+            }
+            <div class="swf-modal-body">
+                @if (Form != null)
+                {
+                    @((Microsoft.AspNetCore.Components.RenderFragment)(builder =>
+                    {
+                        int seq = 0;
+                        Form.BuildRenderTree(builder, ref seq);
+                    }))
+                }
+                else if (ChildContent != null)
+                {
+                    @ChildContent
+                }
+            </div>
+            @if (Buttons != null && Buttons.Any())
+            {
+                <div class="swf-modal-footer">
+                    @foreach (var btn in Buttons)
+                    {
+                        <button class="swf-modal-btn" @onclick="() => OnButtonClick(btn.Result)">@btn.Text</button>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public Form Form { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public List<ModalButton> Buttons { get; set; }
+    [Parameter] public EventCallback<DialogResult> OnResult { get; set; }
+    [Parameter] public int Width { get; set; } = 400;
+    [Parameter] public int Height { get; set; } = 300;
+
+    private bool _visible = true;
+
+    private string GetDialogStyle()
+    {
+        return $"width:{Width}px;min-height:{Height}px;";
+    }
+
+    private async Task OnButtonClick(DialogResult result)
+    {
+        _visible = false;
+        if (OnResult.HasDelegate)
+            await OnResult.InvokeAsync(result);
+    }
+
+    private async Task OnCloseClick()
+    {
+        _visible = false;
+        if (OnResult.HasDelegate)
+            await OnResult.InvokeAsync(DialogResult.Cancel);
+    }
+
+    private async Task OnOverlayClick()
+    {
+        _visible = false;
+        if (OnResult.HasDelegate)
+            await OnResult.InvokeAsync(DialogResult.Cancel);
+    }
+
+    public class ModalButton
+    {
+        public string Text { get; set; }
+        public DialogResult Result { get; set; }
+    }
+}
